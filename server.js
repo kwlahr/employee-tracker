@@ -19,14 +19,7 @@ var listRoles;
 var listDep;
 var listEmp;
 
-// Initiate MySQL Connection.
-connection.connect(function(err) {
-  if (err) {
-    console.error("error connecting: " + err.stack);
-    return;
-  }
-  console.log("connected as id " + connection.threadId);
-
+function query() {
   connection.query("SELECT * from role", function(error, res) {
     listRoles = res.map(role => ({ name: role.title, value: role.id }));
   });
@@ -39,12 +32,21 @@ connection.connect(function(err) {
       name: `${emp.first_name} ${emp.last_name}`,
       value: emp.id
     }));
+})};
+
+// Initiate MySQL Connection.
+connection.connect(function(err) {
+  if (err) {
+    console.error("error connecting: " + err.stack);
+    return;
+  }
+  console.log("connected as id " + connection.threadId);
   });
 
   start();
-});
 
 function start() {
+  query();
   inquirer
     .prompt({
       name: "action",
